@@ -1,43 +1,43 @@
 import { useState, useEffect } from "react";
 
+function Hello() {
+  useEffect(() => {
+    console.log("hi :)");   // 처음 실행될때 실행
+    return () => console.log("bye :(");  // 실행이 종료될때 실행
+  }, []);
+
+  return <h1>Hello</h1>;
+}
+
+function Hello2(){  // 위와 같다. 
+  function byFn() {
+    console.log("bye :(");
+  }
+  function hiFn(){
+    console.log("hi :)"); 
+    return byFn;
+  }
+  useEffect(hiFn, []);
+
+  return <h1>Hello</h1>;
+}
+
 function App() {
-  const [counter, setValue] = useState(0);
-  const [keyword, setKeyword] = useState("");
-
-  const onClick = () => setValue((prev) => prev + 1);  
-  const onChange = (event) => setKeyword(event.target.value);
-  
-  console.log("i run all the time");
-
-  useEffect(() => {
-    console.log("I run only once.");
-  }, []); // 이코드는 처음 시작할때 한번만 실행된다!!
-
-  useEffect(() => {
-    console.log("I run when 'keyword' changes.");
-  }, [keyword]); // 키워드가 바뀔때만 실행된다. 
-
-  useEffect(() => {
-    console.log("I run when 'counter' changes.");
-  }, [counter]); // 카운터가 바뀔때만 실행된다. 
-  
-  useEffect(() => {
-    console.log("I run when keyword & counter change");
-  }, [keyword, counter]); // 여러조건을 넣는것도 가능. 
-
+  const [showing, setShowing] = useState(false);
+  const onClick = () => setShowing((prev) => !prev);
   return (
     <div>
-      <input
-        value={keyword}
-        onChange={onChange}
-        type="text"
-        placeholder="Search here..."
-      />
-      <h1>{counter}</h1>
-      <button onClick={onClick}>click me</button>
+      {showing ? <Hello /> : null}
+      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
     </div>
   );
 }
 
 export default App;
 
+/*
+  show hide 를 누를때마다
+  Hello() 의 hi 와 bye 가 계속나타남.
+  이유는 {showing ? <Hello /> : null} 에의해 
+  사라지고(디스트로이) 나타나기(크리에이트)를 반복하기 떄문이다. 
+*/
