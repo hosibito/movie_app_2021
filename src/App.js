@@ -2,30 +2,42 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [coins, setCoins] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const getMovies = async () => {
+    const json = await (
+      await fetch(
+        `https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year`
+      )
+    ).json();
+    setMovies(json.data.movies);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    fetch("https://api.coinpaprika.com/v1/tickers")
-      .then((response) => response.json())
-      .then((json) => {
-        setCoins(json);
-        setLoading(false);
-      });
+    getMovies();    
   }, []);
 
   return (
     <div>
-      <h1>The Coins! {loading ? "" : `(${coins.length})`}</h1>
       {loading ? (
-        <strong>Loading...</strong>
-      ) : (
-        <select>
-          {coins.map((coin) => (
-            <option key={coin.id}>
-              {coin.name} ({coin.symbol}): ${coin.quotes.USD.price} USD
-            </option>
-          ))}
-        </select>
-      )}
+          <h1>Loading...</h1>
+        ) : (
+          <div>
+            {movies.map((movie) => (
+              <div key={movie.id}>
+                <img src={movie.medium_cover_image} />
+                <h2>{movie.title}</h2>
+                <p>{movie.summary}</p>
+                <ul>
+                  {movie.genres.map((g) => (
+                    <li key={g}>{g}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}       
+          </div>
+       )      
+      }
     </div>
   );
 }
@@ -41,31 +53,14 @@ export default App;
 
   3. 데이터를 가져온다.
       데이터를 가져오는건 처음시작할때 한번만 하고 싶으므로 useEffect 를 사용한다. 
-          useEffect(() => {
-            fetch("https://api.coinpaprika.com/v1/tickers")
-              .then((response) => response.json())
-              .then((json) => {
-                console.log(json)
-              });
-          }, []);
+          전에는 then 을 썻으나 최신 JS 문법사용
       
   4. 가져온데이터를 넣어줄 공간을 마련한다. 
-    const [coins, setCoins] = useState([]);
+     const [movies, setMovies] = useState([]);
 
   5. 스테이트에 데이터를 넣어주고.. 넣어줫으므로 로딩중 이 아니게 한다.
-        setCoins(json);
-        setLoading(false);
-  6. 데이터가 화면에 표시되게 해준다. 
-      <h1>The Coins! {loading ? "" : `(${coins.length})`}</h1>
-      {loading ? (
-        <strong>Loading...</strong>
-      ) : (
-        <select>
-          {coins.map((coin) => (
-            <option>
-              {coin.name} ({coin.symbol}): ${coin.quotes.USD.price} USD
-            </option>
-          ))}
-        </select>
-      )}
+      setMovies(json.data.movies);
+      setLoading(false););
+  6. 데이터가 화면에 표시되게 해준다.       
+  
 */   
