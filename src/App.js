@@ -5,14 +5,17 @@ function App() {
   const [toDos, setToDos] = useState([]);
   const onChange = (event) => setToDo(event.target.value);
   const onSubmit = (event) => {
-    event.preventDefault();
-    if (toDo === "") {
-      return;
-    }
-    setToDos((currentArray) => [toDo, ...currentArray]); 
-    // 자마스크립트 문법. 기존리스트와 새 요소를 더한 새 리스트를 작성
-    // 리엑트에서는 절대로 toDos.push(toDo) 같이 직접 수정해서는 안된다. 
-    setToDo("");
+      event.preventDefault();
+      if (toDo === "") {
+        return;
+      }
+      setToDos((currentArray) => [toDo, ...currentArray]);  // JS 문법 배열을 추가해서 새 배열을 반환한다. 
+      // 리엑트 에서 값을 변경할시 값을 변경하는곳을 이용한다. 
+      // 이곳에는 값을 직접 넣어줄수도 잇고 setToDo("");
+      // 함수를 이용할수도 있다. setToDos((currentArray) => [toDo, ...currentArray]); 
+      // 이때 함수를 이용하면 함수의 인자값으로 현제의 값을 자동으로 준다. 이름만 정해서 사용하면 된다. 
+      // 리엑트에서는 절대로 toDos.push(toDo)같이 직접 수정해서는 안된다.(화면갱신도 이루어지지 않음. )
+      setToDo("");
   };
   return (
     <div>
@@ -25,16 +28,13 @@ function App() {
           placeholder="Write your to do..."
         />
         <button>Add To Do</button>
-      </form>
+      </form>    
     </div>
   );
 }
-
 export default App;
-
 /*
  input 만드는 의식의 흐름.
-    1. input 를 만든다.
       <input type="text" placeholder="Write your to do..."/>
     2. input 에서 입력될 값을 다룰 공간을 마련한다. 
       const [toDo, setToDo] = useState("");  기본값을 정해주고, 받아올value 값과 수정할수 있는 함수를 지정.
