@@ -25,6 +25,7 @@ function Home() {
           {movies.map((movie) => (
             <Movie
               key={movie.id}
+              id={movie.id}
               coverImg={movie.medium_cover_image}
               title={movie.title}
               summary={movie.summary}
@@ -38,8 +39,3 @@ function Home() {
 }
 export default Home;
 
-/*
-  /components/Movie.js  를 만들어서 분리한다. 
-  리엑트에서 map 를 쓸떄는 반드시 key 값이 있어야한다 
-    (없으면 console 창에서 오류가 발생한다. )
-*/

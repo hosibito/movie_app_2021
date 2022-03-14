@@ -1,10 +1,13 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-function Movie({ coverImg, title, summary, genres }) {
+function Movie({id, coverImg, title, summary, genres }) {
   return (
     <div>
       <img src={coverImg} alt={title} />
-      <h2>{title}</h2>
+      <h2>
+        <Link to={`/movies/${id}`}>{title}</Link>
+      </h2>
       <p>{summary}</p>
       <ul>
         {genres.map((g) => (
@@ -16,6 +19,7 @@ function Movie({ coverImg, title, summary, genres }) {
 }
 
 Movie.propTypes = {
+  id: PropTypes.number.isRequired,
   coverImg: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   summary: PropTypes.string.isRequired,
@@ -25,7 +29,10 @@ Movie.propTypes = {
 export default Movie;
 
 /*
-1. 부모로 부터 프로퍼티를 받아서 처리하게 만든다. app.js 볼것!
-2. Movie.propTypes 를 정해준다.!(안정해줘도 되지만 정해주는게 나중을 위해 좋다. )
+  라우터 링크를 가져와서 링크를 넣어준다.
+
+  a 태그로 주소로 썡으로 링크를 넣어줄수도 있으나 그럼 새로고침이 발생한다. 
+
+  링크로 넣어주면 값의 명칭역시 정의된대로 간다. 
 
 */
